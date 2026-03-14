@@ -1,4 +1,5 @@
 // ------------------ VÍCIOS (15) ------------------
+//Array de objetos: cada objeto representa um tipo de vício que o usuário pode escolher.
 
 const addictions = [
   {
@@ -109,6 +110,7 @@ const addictions = [
 ];
 
 // ------------------ BOSSES ------------------
+//Outro array de objetos: cada objeto é um boss do jogo, serve para cada usuário escolher um inimigo temático relacionado ao vício.
 
 const bosses = [
   {
@@ -353,14 +355,24 @@ const initialState = {
   achievements: [],
 };
 
+// A função loadState coleta o estado salvo do jogo no navegador.
+// Através do getItem buscamos no localStorage um possível estado salvo.
+// Se existir, fazemos a conversão do texto (JSON) para objeto JavaScript usando JSON.parse.
+// Se não existir nada salvo, retornamos o initialState definido no início do código.
 function loadState() {
   const saved = localStorage.getItem("vicioHeroState_v2");
   if (saved) return JSON.parse(saved);
   return initialState;
 }
 
+// "state" guarda o estado atual do jogo em memória.
+// Quando algo muda no jogo (XP, dias sem vício, etc), o state é atualizado.
 let state = loadState();
 
+// Sempre que o state é alterado, usamos saveState() para salvar o progresso.
+// Como o localStorage só aceita texto, precisamos converter o objeto JS para texto
+// usando JSON.stringify antes de salvar.
+// Depois disso chamamos render() para atualizar a interface com os novos dados.
 function saveState() {
   localStorage.setItem("vicioHeroState_v2", JSON.stringify(state));
   render();
@@ -549,6 +561,37 @@ function saveDiaryEntry() {
   saveState();
 }
 
+function renderDiary() {
+  diaryList.innerHTML = "";
+
+  if (!state.diary.length) {
+    const empty = document.createElement("div");
+    empty.className = "small";
+    empty.textContent = "Nenhuma entrada no diário ainda.";
+    diaryList.appendChild(empty);
+    return;
+  }
+
+  state.diary.forEach((entry) => {
+    const entryDiv = document.createElement("div");
+    entryDiv.className = "diary-entry";
+
+    const date = document.createElement("strong");
+    date.textContent = entry.data;
+
+    const motivation = document.createElement("p");
+    motivation.textContent = "Motivação: " + entry.motivacao;
+
+    const reflection = document.createElement("p");
+    reflection.textContent = "Reflexão: " + entry.reflexao;
+
+    entryDiv.appendChild(date);
+    entryDiv.appendChild(motivation);
+    entryDiv.appendChild(reflection);
+
+    diaryList.appendChild(entryDiv);
+  });
+}
 // ---------- RENDER ----------
 
 function render() {
@@ -593,19 +636,7 @@ function render() {
         .join("")
     : `<div class="small">Nenhuma conquista ainda.</div>`;
 
-  diaryList.innerHTML = state.diary.length
-    ? state.diary
-        .map(
-          (entry) => `
-              <div class="diary-entry">
-                <strong>${entry.data}</strong><br>
-                <span class="label">Motivação:</span> ${entry.motivacao}<br>
-                <span class="label">Reflexões:</span> ${entry.reflexao}
-              </div>
-            `
-        )
-        .join("")
-    : `<div class="small">Nenhuma entrada no diário ainda.</div>`;
+  renderDiary();
 }
 
 // ----------- INICIAR ----------
