@@ -379,6 +379,7 @@ function saveState() {
 }
 
 // ---------- TELAS ----------
+//Ela pega todas as telas, esconde todas, e depois mostra só uma.
 function showScreen(id) {
   document
     .querySelectorAll(".screen")
@@ -386,15 +387,19 @@ function showScreen(id) {
   document.getElementById(id).style.display = "block";
 }
 
+//Decide em qual tela o usuário deve estar, de acordo com o estado atual do app
 function decideStartScreen() {
-  if (!state.usuario) showScreen("screen-login");
+  if (!state.usuario)
+    showScreen("screen-login"); // se não existe usuário logado, mostre a tela de login
+  // Se existe usuário, mas ainda não escolheu o vicio
   else if (!state.addictionId) {
     buildAddictionList();
     showScreen("screen-addiction");
   } else if (!state.bossId) {
+    //Usuário já existe, vicio já foi escolhido, mas ainda falta escolher o boss
     buildBossList();
     showScreen("screen-boss");
-  } else showScreen("screen-dashboard");
+  } else showScreen("screen-dashboard"); // se já existe usuário, existe vicio e o boss já foi escolhido, então podemos mostrar o dash
 }
 
 // ---------- LOGIN ----------
@@ -417,6 +422,7 @@ function backToLogin() {
 // ---------- SELEÇÃO DE VÍCIO ----------
 function buildAddictionList() {
   addictionList.innerHTML = "";
+
   addictions.forEach((add) => {
     const div = document.createElement("div");
     div.className = "card-option";
@@ -431,6 +437,7 @@ function buildAddictionList() {
   });
 }
 
+//Salva no state qual vicio foi escolhido e reinicia o boss caso o usuário troque
 function selectAddiction(id) {
   state.addictionId = id;
   state.bossId = null;
@@ -444,13 +451,21 @@ function backToAddiction() {
 }
 
 // ---------- SELEÇÃO DE BOSS ----------
+
+//Monta a lista de bosses que pertencem ao vicio selecionado
 function buildBossList() {
   bossList.innerHTML = "";
 
-  const addiction = addictions.find((a) => a.id === state.addictionId);
-  const bossIds = addiction.bosses;
+  const addiction = addictions.find((a) => a.id === state.addictionId); //Se state.addictionId for "redes", ele procura no array addictions o objeto correspondente.
 
-  const filtered = bosses.filter((b) => bossIds.includes(b.id));
+  if (!addiction) {
+    state.addictionId = null;
+    saveState();
+    return;
+  }
+  const bossIds = addiction.bosses; //Pegando os IDs dos bosses
+
+  const filtered = bosses.filter((b) => bossIds.includes(b.id)); // basicamente pergunta: Esse boss está na lista de IDs permitidos?
 
   filtered.forEach((boss) => {
     const div = document.createElement("div");
@@ -631,7 +646,7 @@ function render() {
                 <div><span class="tag">Conquista</span> <strong>${a.name}</strong></div>
                 <div class="small">${a.desc}</div>
               </div>
-            `
+            `,
         )
         .join("")
     : `<div class="small">Nenhuma conquista ainda.</div>`;
