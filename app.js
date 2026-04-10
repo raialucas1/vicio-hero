@@ -608,7 +608,7 @@ function renderDiary() {
   });
 }
 // ---------- RENDER ----------
-
+//Pega o estado atual(state) e desenha a interface com base nele
 function render() {
   if (state.usuario) {
     userInfoHeader.innerHTML = `
@@ -619,10 +619,11 @@ function render() {
 
   decideStartScreen();
 
-  if (!state.usuario || !state.addictionId || !state.bossId) return;
+  if (!state.usuario || !state.addictionId || !state.bossId) return; // se alguma dessas informações faltar a funcção para aqui
+  //Por que isso existe? Por que as próximas linhas mexem em elementos do dashboard e dependem dessas informações
 
   xpStat.textContent = `${state.xp} XP`;
-  levelLabel.textContent = `Nível ${state.nivel} • ${getTitle(state.nivel)}`;
+  levelLabel.textContent = `Nível ${state.nivel} • ${getTitle(state.nivel)}`; // Mostra o nível númerico e o titulo
 
   const need = xpNeeded(state.nivel);
   xpBar.style.width = `${Math.min(100, (state.xp / need) * 100)}%`;
