@@ -355,26 +355,30 @@ const initialState = {
   achievements: [],
 };
 
-// A função loadState coleta o estado salvo do jogo no navegador.
-// Através do getItem buscamos no localStorage um possível estado salvo.
-// Se existir, fazemos a conversão do texto (JSON) para objeto JavaScript usando JSON.parse.
-// Se não existir nada salvo, retornamos o initialState definido no início do código.
-function loadState() {
-  const saved = localStorage.getItem("vicioHeroState_v2");
-  if (saved) return JSON.parse(saved);
-  return initialState;
+async function loadState() {
+  const res = await fetch("http://localhost:3000/load");
+  const data = await res.json();
+  return data || initialState;
 }
 
-// "state" guarda o estado atual do jogo em memória.
-// Quando algo muda no jogo (XP, dias sem vício, etc), o state é atualizado.
-let state = loadState();
+let state = initialState;
 
-// Sempre que o state é alterado, usamos saveState() para salvar o progresso.
-// Como o localStorage só aceita texto, precisamos converter o objeto JS para texto
-// usando JSON.stringify antes de salvar.
-// Depois disso chamamos render() para atualizar a interface com os novos dados.
-function saveState() {
-  localStorage.setItem("vicioHeroState_v2", JSON.stringify(state));
+async function init() {
+  state = await loadState();
+  render();
+}
+
+init();
+
+async function saveState() {
+  await fetch("http://localhost:3000/save", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(state),
+  });
+
   render();
 }
 
