@@ -6,25 +6,38 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-// Servir arquivos estáticos do frontend
 app.use(express.static(path.join(__dirname, "public")));
 
-let state = null;
+let states = {};
 
-// SALVAR
+// SALVAR estado por usuário
 app.post("/save", (req, res) => {
-  state = req.body;
-  console.log("Estado salvo:", state);
+  const incomingState = req.body;
+  const email = incomingState?.usuario?.email;
+
+  if (!email) {
+    return res
+      .status(400)
+      .json({ ok: false, error: "E-mail do usuário não informado." });
+  }
+
+  states[email] = incomingState;
+  console.log(`Estado salvo para ${email}`);
   res.json({ ok: true });
 });
 
-// CARREGAR
+// CARREGAR estado por usuário
 app.get("/load", (req, res) => {
-  res.json(state);
+  const email = req.query.email;
+
+  if (!email) {
+    return res.json(null);
+  }
+
+  const userState = states[email] || null;
+  res.json(userState);
 });
 
-// Rota principal
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });

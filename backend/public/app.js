@@ -355,13 +355,14 @@ const initialState = {
   achievements: [],
 };
 
-async function loadState() {
-  const res = await fetch("/load");
-  const data = await res.json();
-  return data || initialState;
-}
+//async function loadState() {
+// const res = await fetch("/load");
+//const data = await res.json();
+//return data || initialState;
+//}
 
 let state = initialState;
+render();
 
 async function init() {
   state = await loadState();
@@ -407,20 +408,30 @@ function decideStartScreen() {
 }
 
 // ---------- LOGIN ----------
-function login() {
+async function login() {
   const nome = nomeInput.value.trim();
   const email = emailInput.value.trim();
+
   if (!nome || !email) return alert("Preencha nome e e-mail.");
 
-  state.usuario = { nome, email };
-  saveState();
-}
+  try {
+    const res = await fetch(`/load?email=${encodeURIComponent(email)}`);
+    const savedState = await res.json();
 
-function backToLogin() {
-  state.addictionId = null;
-  state.bossId = null;
-  saveState();
-  showScreen("screen-login");
+    if (savedState) {
+      state = savedState;
+    } else {
+      state = {
+        ...initialState,
+        usuario: { nome, email },
+      };
+    }
+
+    saveState();
+  } catch (error) {
+    console.error("Erro ao carregar estado do usuário:", error);
+    alert("Erro ao carregar os dados do usuário.");
+  }
 }
 
 // ---------- SELEÇÃO DE VÍCIO ----------
