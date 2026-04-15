@@ -356,7 +356,7 @@ const initialState = {
 };
 
 async function loadState() {
-  const res = await fetch("http://localhost:3000/load");
+  const res = await fetch("/load");
   const data = await res.json();
   return data || initialState;
 }
@@ -371,7 +371,7 @@ async function init() {
 init();
 
 async function saveState() {
-  await fetch("http://localhost:3000/save", {
+  await fetch("/save", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
