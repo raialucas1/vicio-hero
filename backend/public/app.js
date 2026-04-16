@@ -353,6 +353,7 @@ const initialState = {
   bossHp: 100,
   diary: [],
   achievements: [],
+  lastCheckIn: null,
 };
 
 //async function loadState() {
@@ -363,13 +364,6 @@ const initialState = {
 
 let state = initialState;
 render();
-
-async function init() {
-  state = await loadState();
-  render();
-}
-
-init();
 
 async function saveState() {
   await fetch("/save", {
@@ -452,6 +446,20 @@ function buildAddictionList() {
   });
 }
 
+function checkRankUp() {
+  const currentRank = getRank(state.diasSemVicio);
+
+  if (!state.lastRank) {
+    state.lastRank = currentRank;
+    return;
+  }
+
+  if (state.lastRank !== currentRank) {
+    state.lastRank = currentRank;
+    alert(`🔥 Nova patente: ${currentRank}!`);
+  }
+}
+
 //Salva no state qual vicio foi escolhido e reinicia o boss caso o usuário troque
 function selectAddiction(id) {
   state.addictionId = id;
@@ -506,12 +514,20 @@ function xpNeeded(level) {
   return level * 150 + level * level * 50;
 }
 
-function getTitle(level) {
-  if (level <= 5) return "Novato";
-  if (level <= 15) return "Guerreiro";
-  if (level <= 30) return "Veterano";
-  if (level <= 50) return "Campeão";
-  return "Lenda";
+function getRank(days) {
+  if (days < 3) return "Novato";
+  if (days < 7) return "Iniciante";
+  if (days < 14) return "Resistente";
+  if (days < 21) return "Firme";
+  if (days < 30) return "Brabo";
+  if (days < 45) return "Casca Grossa";
+  if (days < 60) return "Casca Grossíssima";
+  if (days < 90) return "Monstro";
+  if (days < 120) return "Lenda Viva";
+  if (days < 180) return "Transcendeu a Matéria";
+  if (days < 240) return "Saiu da Matrix";
+  if (days < 365) return "Além do Controle";
+  return "Outro Nível";
 }
 
 function addXp(qtd) {
@@ -576,7 +592,17 @@ function triggerBossHitEffects() {
 }
 
 function markCleanDay() {
+  const today = new Date().toDateString();
+
+  if (state.lastCheckIn === today) {
+    alert("Você já marcou seu dia limpo hoje!");
+    return;
+  }
+
+  state.lastCheckIn = today;
+
   state.diasSemVicio++;
+  checkRankUp();
   addXp(10);
 
   const damage = calcDamage();
@@ -713,7 +739,7 @@ function render() {
   //Por que isso existe? Por que as próximas linhas mexem em elementos do dashboard e dependem dessas informações
 
   xpStat.textContent = `${state.xp} XP`;
-  levelLabel.textContent = `Nível ${state.nivel} • ${getTitle(state.nivel)}`; // Mostra o nível númerico e o titulo
+  levelLabel.textContent = `Nível ${state.nivel} • ${getRank(state.diasSemVicio)}`; // Mostra o nível númerico e o titulo
 
   const need = xpNeeded(state.nivel);
   xpBar.style.width = `${Math.min(100, (state.xp / need) * 100)}%`;
@@ -745,6 +771,6 @@ function render() {
   renderDiary();
 }
 
-//iniciar
+//in
 checkAchievements();
 render();
