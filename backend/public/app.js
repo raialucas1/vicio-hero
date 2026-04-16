@@ -523,14 +523,89 @@ function addXp(qtd) {
   }
 }
 
+// ── SISTEMA DE DANO ANIMADO ──
+
+// Calcula o dano causado ao boss com base no nível do herói
+function calcDamage() {
+  const baseDamage = 5; // 5% de HP por dia limpo
+  const levelBonus = Math.floor(state.nivel / 5); // +1% a cada 5 níveis
+  return baseDamage + levelBonus;
+}
+
+// Cria o número flutuante de dano em cima do card do boss
+function showDamageFloat(damage, isBonus = false) {
+  const wrapper = document.getElementById("boss-card-wrapper");
+  if (!wrapper) return;
+
+  const float = document.createElement("div");
+  float.className = "damage-float" + (isBonus ? " bonus" : "");
+
+  const icon = isBonus ? " 💥" : " ⚔️";
+  float.textContent = `-${damage}% HP${icon}`;
+
+  // Posição aleatória horizontal para variar o efeito
+  const offsetX = 20 + Math.random() * 60;
+  float.style.left = offsetX + "%";
+  float.style.top = "30%";
+
+  wrapper.appendChild(float);
+
+  // Remove o elemento após a animação terminar
+  setTimeout(() => float.remove(), 1500);
+}
+
+// Dispara o tremor no card do boss e o flash na barra de HP
+function triggerBossHitEffects() {
+  const card = document.getElementById("bossCard");
+  const hpBar = document.getElementById("bossHpBar");
+
+  if (card) {
+    card.classList.remove("boss-shake", "boss-card-hit");
+    // Force reflow para reiniciar a animação caso já esteja rodando
+    void card.offsetWidth;
+    card.classList.add("boss-shake", "boss-card-hit");
+    setTimeout(() => card.classList.remove("boss-shake", "boss-card-hit"), 500);
+  }
+
+  if (hpBar) {
+    hpBar.classList.remove("hp-bar-hit");
+    void hpBar.offsetWidth;
+    hpBar.classList.add("hp-bar-hit");
+    setTimeout(() => hpBar.classList.remove("hp-bar-hit"), 500);
+  }
+}
+
 function markCleanDay() {
   state.diasSemVicio++;
   addXp(10);
 
+  const damage = calcDamage();
+  let totalDamage = damage;
+  let isWeekBonus = false;
+
+  // Bônus de semana completa: dano extra de 15%
   if (state.diasSemVicio % 7 === 0) {
-    state.bossHp -= 15;
-    if (state.bossHp < 0) state.bossHp = 0;
-    alert("Você causou dano ao boss! (-15% HP)");
+    totalDamage += 15;
+    isWeekBonus = true;
+  }
+
+  // Aplica o dano ao boss
+  state.bossHp = Math.max(0, state.bossHp - totalDamage);
+
+  // Renderiza antes dos efeitos para atualizar a barra de HP
+  render();
+
+  // Dispara os efeitos visuais com pequeno delay para a barra já estar no DOM
+  setTimeout(() => {
+    showDamageFloat(totalDamage, isWeekBonus);
+    triggerBossHitEffects();
+  }, 50);
+
+  // Segundo float para o bônus de semana
+  if (isWeekBonus) {
+    setTimeout(() => {
+      showDamageFloat(15, true);
+    }, 400);
   }
 
   checkAchievements();
@@ -670,6 +745,6 @@ function render() {
   renderDiary();
 }
 
-// ----------- INICIAR ----------
+//iniciar
 checkAchievements();
 render();

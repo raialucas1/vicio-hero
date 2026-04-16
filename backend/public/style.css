@@ -128,7 +128,10 @@ button {
   color: #020617;
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.1s ease, box-shadow 0.1s ease, filter 0.1s;
+  transition:
+    transform 0.1s ease,
+    box-shadow 0.1s ease,
+    filter 0.1s;
 }
 button:hover {
   filter: brightness(1.05);
@@ -203,7 +206,10 @@ button.secondary {
   border: 1px solid #1f2937;
   cursor: pointer;
   margin-bottom: 10px;
-  transition: border 0.15s ease, transform 0.1s ease, box-shadow 0.1s ease;
+  transition:
+    border 0.15s ease,
+    transform 0.1s ease,
+    box-shadow 0.1s ease;
 }
 .card-option:hover {
   border-color: #22c55e;
@@ -267,4 +273,113 @@ button.secondary {
   #userInfoHeader {
     text-align: left;
   }
+}
+
+/* ── ANIMAÇÕES DE DANO ── */
+
+/* Número flutuante de dano */
+.damage-float {
+  position: absolute;
+  font-size: 22px;
+  font-weight: bold;
+  color: #ef4444;
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+  pointer-events: none;
+  z-index: 999;
+  white-space: nowrap;
+  animation: floatUp 1.4s ease-out forwards;
+}
+
+.damage-float.bonus {
+  font-size: 26px;
+  color: #f97316;
+  text-shadow: 0 0 12px rgba(249, 115, 22, 0.9);
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-8px) scale(1.15);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-60px) scale(0.9);
+  }
+}
+
+/* Tremor no card do boss */
+.boss-shake {
+  animation: bossShake 0.45s ease-in-out;
+}
+
+@keyframes bossShake {
+  0% {
+    transform: translateX(0);
+  }
+  15% {
+    transform: translateX(-6px);
+  }
+  30% {
+    transform: translateX(6px);
+  }
+  45% {
+    transform: translateX(-5px);
+  }
+  60% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+  90% {
+    transform: translateX(3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* Flash vermelho na barra de HP */
+.hp-bar-hit {
+  animation: hpFlash 0.5s ease-out;
+}
+
+@keyframes hpFlash {
+  0% {
+    background: linear-gradient(90deg, #ef4444, #f97316);
+    filter: brightness(1.6);
+  }
+  60% {
+    background: linear-gradient(90deg, #ef4444, #f97316);
+    filter: brightness(1.2);
+  }
+  100% {
+    background: linear-gradient(90deg, #22c55e, #14b8a6);
+    filter: brightness(1);
+  }
+}
+
+/* Card do boss piscando em vermelho */
+.boss-card-hit {
+  animation: cardFlash 0.5s ease-out;
+}
+
+@keyframes cardFlash {
+  0% {
+    box-shadow:
+      0 0 0 2px #ef4444,
+      0 8px 20px rgba(239, 68, 68, 0.5);
+  }
+  100% {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Wrapper do boss — precisa de position: relative pro float funcionar */
+#boss-card-wrapper {
+  position: relative;
 }
