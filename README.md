@@ -1,46 +1,55 @@
 # Vicio Hero
 
-Vicio Hero e um web app gamificado para ajudar usuarios a acompanhar habitos que desejam reduzir ou abandonar. A proposta transforma o vicio escolhido em um "boss", criando progresso por dias limpos, XP, niveis, conquistas e diario pessoal.
+Vicio Hero e um projeto de extensao desenvolvido como web app. A ideia do projeto e ajudar pessoas que querem controlar ou reduzir algum habito prejudicial usando elementos de gamificacao.
 
-## Acesso online
+Na aplicacao, o usuario escolhe um vicio que deseja enfrentar e depois seleciona um boss relacionado a esse tema. Conforme registra dias sem recaida, ganha XP, sobe de nivel, desbloqueia conquistas e diminui a vida do boss.
 
-Quando o GitHub Pages estiver ativado, a pagina publica do projeto ficara em:
+## Links do projeto
+
+Pagina de apresentacao:
 
 https://raialucas1.github.io/vicio-hero/
 
-A aplicacao pode ser acessada pela propria pagina do projeto ou diretamente em:
+Aplicacao online:
 
 https://raialucas1.github.io/vicio-hero/app/
 
+Repositorio:
+
+https://github.com/raialucas1/vicio-hero
+
 ## Funcionalidades
 
-- Login simples por nome e e-mail.
-- Escolha do vicio que o usuario deseja combater.
-- Escolha de boss tematico relacionado ao vicio.
+- Login simples com nome e e-mail.
+- Selecao do vicio que o usuario deseja combater.
+- Selecao de boss tematico.
 - Contador de dias sem recaida.
 - Sistema de XP, nivel e patente.
-- Barra de vida do boss com dano por progresso.
-- Bonus semanal de dano.
-- Registro de recaida com impacto no progresso.
+- Barra de vida do boss.
+- Dano no boss ao marcar um dia limpo.
+- Bonus semanal de progresso.
+- Registro de recaida.
 - Conquistas por marcos importantes.
-- Diario pessoal com motivacao e reflexoes.
-- Salvamento local no navegador com `localStorage`.
+- Diario para motivacoes e reflexoes.
+- Dados salvos no proprio navegador.
 
-## Tecnologias
+## Tecnologias usadas
 
-- HTML5
-- CSS3
+- HTML
+- CSS
 - JavaScript
-- Node.js e Express para execucao local opcional
-- GitHub Pages para publicacao estatica
+- Node.js com Express para executar localmente
+- GitHub Pages para hospedagem
 
-## Como rodar localmente
+## Como executar localmente
 
-Opção estatica:
+Tambem e possivel abrir direto o arquivo:
 
-1. Abra `backend/public/index.html` no navegador.
+```text
+backend/public/index.html
+```
 
-Opção com servidor local:
+Ou rodar com o servidor local:
 
 ```bash
 cd backend
@@ -48,23 +57,26 @@ npm install
 npm start
 ```
 
-Depois acesse:
+Depois basta acessar:
 
 ```text
 http://localhost:3000
 ```
 
-## Como publicar no GitHub Pages
+## Publicacao
 
-1. Envie as alteracoes para o repositorio no GitHub.
-2. No GitHub, abra `Settings`.
-3. Entre em `Pages`.
-4. Em `Build and deployment`, escolha `Deploy from a branch`.
-5. Em `Branch`, selecione `main` e a pasta `/docs`.
-6. Salve a configuracao.
-7. Aguarde o GitHub gerar o link publico.
+O projeto foi preparado para ser publicado pelo GitHub Pages usando a pasta `docs`.
 
-## Estrutura principal
+Configuracao usada:
+
+```text
+Branch: main
+Folder: /docs
+```
+
+A pasta `docs` contem a pagina de apresentacao e uma copia estatica da aplicacao em `docs/app`.
+
+## Estrutura do projeto
 
 ```text
 backend/
@@ -73,6 +85,7 @@ backend/
     style.css
     app.js
   server.js
+
 docs/
   index.html
   style.css
@@ -82,19 +95,21 @@ docs/
     app.js
 ```
 
-## Observacao tecnica
+## Observacoes
 
-Para funcionar no GitHub Pages, a versao publicada usa `localStorage` no navegador. Isso permite que o app seja hospedado sem backend. Os dados ficam salvos no dispositivo do usuario e nao sao enviados para um servidor.
+A versao publicada no GitHub Pages nao depende de servidor. Os dados do usuario ficam guardados no navegador, o que e suficiente para a proposta da entrega e facilita a hospedagem publica.
 
-## Roteiro sugerido para video de ate 10 minutos
+## Apresentacao final
 
-1. Apresentar o problema e a ideia do Vicio Hero.
-2. Mostrar a pagina publica do projeto no GitHub Pages.
-3. Acessar a aplicacao online.
-4. Demonstrar login, escolha de vicio e escolha de boss.
-5. Marcar um dia limpo e explicar XP, nivel, patente e dano no boss.
-6. Registrar uma entrada no diario.
-7. Mostrar as conquistas.
-8. Explicar rapidamente a estrutura do repositorio.
-9. Destacar o uso de HTML, CSS, JavaScript, armazenamento local e publicacao no GitHub Pages.
-10. Encerrar mostrando como o projeto atende aos requisitos da entrega.
+Para o video final, a demonstracao pode seguir esta ordem:
+
+1. Apresentar o objetivo do Vicio Hero.
+2. Mostrar a pagina publicada no GitHub Pages.
+3. Abrir a aplicacao online.
+4. Fazer login com nome e e-mail.
+5. Escolher um vicio e um boss.
+6. Marcar um dia limpo e mostrar o ganho de XP.
+7. Mostrar a vida do boss diminuindo.
+8. Registrar uma anotacao no diario.
+9. Mostrar o repositorio no GitHub.
+10. Encerrar explicando como o projeto atende a entrega final.
