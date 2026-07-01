@@ -100,6 +100,3 @@ docs/
 A versao publicada no GitHub Pages nao depende de servidor. Os dados do usuario ficam guardados no navegador, o que e suficiente para a proposta da entrega e facilita a hospedagem publica.
 
 
-8. Registrar uma anotacao no diario.
-9. Mostrar o repositorio no GitHub.
-10. Encerrar explicando como o projeto atende a entrega final.
