@@ -99,17 +99,7 @@ docs/
 
 A versao publicada no GitHub Pages nao depende de servidor. Os dados do usuario ficam guardados no navegador, o que e suficiente para a proposta da entrega e facilita a hospedagem publica.
 
-## Apresentacao final
 
-Para o video final, a demonstracao pode seguir esta ordem:
-
-1. Apresentar o objetivo do Vicio Hero.
-2. Mostrar a pagina publicada no GitHub Pages.
-3. Abrir a aplicacao online.
-4. Fazer login com nome e e-mail.
-5. Escolher um vicio e um boss.
-6. Marcar um dia limpo e mostrar o ganho de XP.
-7. Mostrar a vida do boss diminuindo.
 8. Registrar uma anotacao no diario.
 9. Mostrar o repositorio no GitHub.
 10. Encerrar explicando como o projeto atende a entrega final.
